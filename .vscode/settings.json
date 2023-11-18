@@ -1,0 +1,16 @@
+{
+    "sqltools.connections": [
+        {
+            "pgOptions": {
+                "ssl": {
+                    "rejectUnauthorized": true
+                }
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "driver": "PostgreSQL",
+            "name": "notes_db",
+            "connectString": "postgres://matta_ale:Nf0qBrkL8S0p4Nn3BM7Z6fRy248bfp3s@dpg-clc22jmg1b2c73er4akg-a.frankfurt-postgres.render.com/notes_db_juzg"
+        }
+    ]
+}
