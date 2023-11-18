@@ -6,7 +6,7 @@ const updateNoteHandler = async (data) => {
 
   try {
     const updated = await Note.update(data, {
-      where: { id:id, isActive:true }, return: true, raw:true,
+      where: { id:id}, return: true, raw:true,
     });
     if (updated[0]===0) {
       throw new CustomError(`Can't update note with id ${id}`, 400);

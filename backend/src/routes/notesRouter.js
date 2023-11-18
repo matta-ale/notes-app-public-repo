@@ -4,7 +4,9 @@ const {
    createNote,
    deleteNoteById,
    updateNote,
-   setNoteStatusById
+   setNoteStatusById,
+   getAllNotes,
+   getFilteredNotes
  } = require('../controllers/notes');
 
 const {
@@ -18,7 +20,7 @@ router.post("/notes", createNoteValidation, createNote);
 router.delete("/notes/:id", deleteNoteByIdValidation, deleteNoteById);
 router.put("/notes", createNoteValidation, updateNote);
 router.put("/notes/status/:id", setNoteStatusById);
-// router.get("/customers", getAllCustomers);
-// router.get("/customers/filter", getFilteredCustomers);
+router.get("/notes", getAllNotes);
+router.get("/notes/filter", getFilteredNotes);
 
 module.exports = router;
