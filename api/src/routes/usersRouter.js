@@ -1,6 +1,5 @@
 const { Router } = require('express');
 
-
 const {
    createUser,
    attemptLogin
@@ -9,7 +8,6 @@ const {
 const {
    createUserValidation,
  } = require('../middlewares/users');
-
 
 const router = Router();
 

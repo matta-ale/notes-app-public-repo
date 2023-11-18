@@ -26,7 +26,7 @@ server.use((req, res, next) => {
 });
 //declaro los middlewares con los archivos routers
 server.use("/", usersRouter);
-//server.use("/", notesRouter);
+server.use("/", notesRouter);
 
 // Error catching endware.
 server.use((err, req, res, next) => {
