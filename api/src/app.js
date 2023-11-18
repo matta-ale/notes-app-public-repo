@@ -3,15 +3,8 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 
 // importo los archivos routers
-// const paymentsRouter = require("./routes/pay/paymentsRouter");
-// const customersRouter = require("./routes/customers/customersRouter.js");
-// const vehiclesRouter = require("./routes/vehicles/vehiclesRouter.js");
-// const bookingsRouter = require("./routes/bookings/bookingsRouter.js");
-// const locationsRouter = require("./routes/locations/locationsRouter.js");
-// const mercadoPagoRouter = require("./routes/mercadoPagoRouter");
-// const sendEmailRouter = require("./routes/sendEmailRouter");
-// const reviewsRouter = require("./routes/review/reviewsRouter");
-// const usersRouter = require("../src/routes/users/usersRouter");
+const usersRouter = require("./routes/usersRouter");
+const notesRouter = require("./routes/notesRouter");
 
 
 const server = express();
@@ -32,15 +25,8 @@ server.use((req, res, next) => {
   next();
 });
 //declaro los middlewares con los archivos routers
-// server.use("/", paymentsRouter);
-// server.use("/", customersRouter);
-// server.use("/", vehiclesRouter);
-// server.use("/", bookingsRouter);
-// server.use("/", locationsRouter);
-// server.use("/", mercadoPagoRouter);
-// server.use("/", sendEmailRouter);
-// server.use("/", reviewsRouter);
-// server.use("/", usersRouter);
+server.use("/", usersRouter);
+//server.use("/", notesRouter);
 
 // Error catching endware.
 server.use((err, req, res, next) => {
