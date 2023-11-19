@@ -14,7 +14,7 @@ const attemptLoginHandler = async (username, password) => {
     if (!passwordMatch) {
       throw new CustomError(`Incorrect password for username ${username}`, 401); // Use 401 for authentication failure.
     }
-    return {acess:true,id:user.id}
+    return {access:true,id:user.id}
   } catch (error) {
     throw new CustomError(error.message, 500);
   }
