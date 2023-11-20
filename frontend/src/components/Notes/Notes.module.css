@@ -1,0 +1,62 @@
+.container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0;
+    height: auto;
+    color: white;
+}
+
+.filterPanel {
+    background-color: rgba(0, 0, 0,0.8);
+    width: 20%;
+}
+
+.upperDiv {
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.upperSubDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+}
+.upperDiv img {
+    height: auto;
+    width: 150px;
+}
+.notesContainer {
+    color: black;
+    display: grid;
+    grid-template-columns: repeat(auto-fit,390px);
+    margin: 10px auto;
+    justify-content: center;
+    max-width: 1170px;
+    height: auto;
+}
+
+.newNoteButton{
+    display: flex;
+    justify-content: space-between;
+    width: 93%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    font-family: cursive;
+    font-size: 20px;
+}
+  
+
+.newNoteButton img {
+    width: 100px; 
+    height: auto;
+    margin: 0 5px; 
+}

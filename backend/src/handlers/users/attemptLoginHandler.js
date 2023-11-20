@@ -8,7 +8,7 @@ const attemptLoginHandler = async (username, password) => {
       where: {username},
     });
     if (!user) {
-      throw new CustomError(`There's no customer matching username ${username}`, 404);
+      throw new CustomError(`There's no user matching username ${username}`, 404);
     }
     const passwordMatch = await comparePassword(password, user.password);
     if (!passwordMatch) {

@@ -1,0 +1,159 @@
+.note {
+    width: 340px;
+    height: 400px;
+    margin: 20px;
+    padding: 10px;
+    display: inline-block;
+    text-align: left;
+    box-shadow: 15px 15px 0px 0px rgba(0, 0, 0, 0.75);
+    background-color: rgba(255, 255, 255, 0.715);
+    position: relative;
+    font-family: cursive;
+}
+
+.title {
+    margin: 10px 0px;
+    font-weight:600;
+    font-size: 24px
+}
+
+.detail {
+    margin-top: 40px;
+}
+
+.tags {
+    display: flex;
+    margin-top: 20px;
+}
+
+.tagContainer {
+    display: flex;
+    align-items: center;
+    color: black;
+    font-weight: 600;
+    margin-right: 5px;
+    background-color: rgb(255, 225, 128);
+    padding: 3px 7px 3px 5px;
+    border-radius:0px 20px 20px 0px;
+    box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.7);
+    height: 22px;
+}
+
+.tagContainer button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+}
+
+.tagContainer img {
+    width: 18px; 
+    height: auto;
+    margin: 0 7px;
+    margin-top: 6px;
+    margin-right: 0; 
+}
+
+.lastUpdate {
+    position: absolute;
+    bottom: 80px;
+    padding-bottom: 3px;
+    font-size: 14px;
+    border-bottom: solid 1px black;
+    width: 93%;
+  }
+
+  .isActive {
+    position: absolute;
+    bottom: 80px;
+    right:16px;
+    margin-bottom: 3px;
+    font-size: 14px;
+    padding:0px 5px;
+    border: solid 1px black;
+  }
+
+  .buttonContainer {
+    position: absolute;
+    bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    width: 93%;
+  }
+  
+  .buttonContainer button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    margin-left: 0
+}
+
+.buttonContainer img {
+    width: 28px; 
+    height: auto;
+    margin: 0 5px; 
+}
+.saveChanges {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    margin-left: 5px;
+    position: absolute;
+    bottom: 15px;
+    left: 0px;
+    padding-left: 4px;
+    font-size: 14px;
+}
+
+.saveChanges img {
+    width: 28px; 
+    height: auto;
+    margin: 0 5px; 
+}
+
+  .buttonContainer span {
+    font-size: 14px;
+  }
+
+  .active {
+    background-color: rgb(181, 223, 181);
+  }
+
+  .archive {
+    background-color:rgb(237, 156, 199);
+  }
+
+  .editTitle {
+    background: none;
+    border: none;
+    outline: none;
+    margin: 10px 0px;
+    font-weight:600;
+    font-size: 24px;
+    font-family: cursive;
+    padding-left:0;
+  }
+
+  .editDetail {
+    margin-top: 29px;
+    margin-left: 0px;
+    padding-left: 0;
+    background: none;
+    border: none;
+    outline: none;
+    font-family: cursive;
+    font-size: 16px;
+    resize: none;
+    overflow: hidden;
+    height: 200px;
+    width: 100%;
+  }

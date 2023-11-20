@@ -1,0 +1,7 @@
+export const SET_USER = 'SET_USER'
+export const GET_FILTERED_NOTES = 'GET_FILTERED_NOTES'
+export const DELETE_NOTE = 'DELETE_NOTE'
+export const UPDATE_NOTE = 'UPDATE_NOTE'
+export const ARCHIVE_NOTE = 'ARCHIVE_NOTE'
+export const CREATE_NOTE = 'CREATE_NOTE'
+export const SET_IS_EDITING = 'SET_IS_EDITING'

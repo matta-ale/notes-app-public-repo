@@ -1,0 +1,92 @@
+.formContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height:100vh;
+}
+.formDiv {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.75);
+    height: 550px;
+    width: 480px;
+}
+
+.form {
+    padding: 20px 60px 40px 60px;
+    font-size:20px;
+    height: 500px;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;   
+}
+.loginAndRegister {
+    display: flex;
+    flex-direction: column
+}
+.register {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.register button {
+    font-family: cursive;
+    font-size: 16px;
+    background-color: rgb(255, 239, 18);
+    width:120px;
+    border-radius: 3px;
+    cursor: pointer;
+    border: none;
+    height: 25px;
+    transition: transform 0.5s;
+}
+
+.input {
+    height:20px;
+    font-family: cursive;
+    font-size:14px; 
+    width:100%;
+    margin-top: 10px; 
+}
+
+.submitButton {
+    font-family: cursive;
+    font-size: 20px;
+    background-color: rgb(105, 255, 18);
+    width:100%;
+    border-radius: 3px;
+    cursor: pointer;
+    border: none;
+    height: 40px;
+    transition: transform 0.5s;
+}
+
+.submitButton:active {
+    transform: translateY(0px);
+    /* https://css3buttongenerator.com/ 
+    placeholder para añadir efectos al botón */
+  }
+
+.warning {
+    color: red;
+    font-size: 12px;
+}
+
+
+.titleContainer {
+    margin-top: 60px;
+    display:flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+}
+
+
+.loginImg {
+    height: 150px ;
+}
