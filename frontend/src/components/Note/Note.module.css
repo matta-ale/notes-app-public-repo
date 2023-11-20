@@ -157,3 +157,40 @@
     height: 200px;
     width: 100%;
   }
+
+  .addingTag {
+    margin-top: 40px;
+    font-family: cursive;
+    font-size: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 50%;
+    height: 90px;
+    margin-left: 40px;
+    background-color: rgba(0, 0, 0,0.8);
+    box-shadow: 15px 15px 0px 0px rgba(0, 0, 0, 0.5); 
+    padding: 30px;
+  }
+  .addingTag input {
+    width: 95%;
+    font-family: cursive;
+    font-size: 18px;
+    margin-top: 5px;
+  }
+
+  .addTagButtons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .addTagButtons button {
+    height: 80%;
+    width: 43%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }

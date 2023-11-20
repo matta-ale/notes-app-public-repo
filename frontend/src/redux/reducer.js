@@ -6,6 +6,11 @@ import {
   ARCHIVE_NOTE,
   CREATE_NOTE,
   SET_IS_EDITING,
+  SET_STATUS_FILTERS,
+  SET_CATEGORY_FILTERS,
+  ADD_TAG_TO_NOTE,
+  SET_CATEGORIES_ARRAY,
+  DELETE_TAG,
 } from './types';
 
 const initialState = {
@@ -13,11 +18,21 @@ const initialState = {
   filters: {
     userId: '',
     isActive: true,
-    category: undefined,
+    category: 'all',
     page: 1,
     pageSize: 100,
   },
   userId: { userId: '', username: '' },
+  categoriesArray: [
+    'All',
+    //   'Kids',
+    //   'Work',
+    //   'Home',
+    //   'Food',
+    //   'Health',
+    //   'Personal',
+    //   'Study',
+  ],
 };
 
 export const notesReducer = (state = initialState, action) => {
@@ -25,9 +40,13 @@ export const notesReducer = (state = initialState, action) => {
   let copy2 = [];
   let copy3 = [];
   let copy4 = [];
-  let copy5 = []
+  let copy5 = [];
+  let copy6 = [];
+  let copy7 = []
+  let splicedArray = []
   let elem;
   let index;
+  let tagElem;
   switch (action.type) {
     case SET_USER:
       return {
@@ -104,17 +123,71 @@ export const notesReducer = (state = initialState, action) => {
 
     case SET_IS_EDITING:
       //busco el elemento en el filteredArray
-      copy5=state.filteredNotes
+      copy5 = state.filteredNotes;
       elem = state.filteredNotes.find((note) => note.id === action.payload.id);
       //busco el índice
       index = state.filteredNotes.findIndex(
         (note) => note.id === action.payload.id
       );
       elem = { ...elem, isEditing: action.payload.status };
-      copy5[index] = elem
+      copy5[index] = elem;
       return {
         ...state,
         filteredNotes: copy5,
+      };
+
+    case SET_STATUS_FILTERS:
+      return {
+        ...state,
+        filters: action.payload,
+      };
+
+    case SET_CATEGORY_FILTERS:
+      return {
+        ...state,
+        filters: action.payload,
+      };
+
+    case ADD_TAG_TO_NOTE:
+      copy6 = state.filteredNotes;
+      elem = state.filteredNotes.find((note) => note.id === action.payload.id);
+      index = state.filteredNotes.findIndex(
+        (note) => note.id === action.payload.id
+      );
+      //está la tag ya en esa note?
+      tagElem = elem.category.find(
+        (category) => category === action.payload.tag
+      );
+      if (!tagElem) {
+        copy6[index] = {
+          ...copy6[index],
+          category: [...copy6[index].category, action.payload.tag],
+        };
+      }
+      return {
+        ...state,
+        filteredNotes: copy6,
+      };
+
+    case SET_CATEGORIES_ARRAY:
+      return {
+        ...state,
+        categoriesArray: action.payload,
+      };
+
+    case DELETE_TAG:
+      copy7 = state.filteredNotes
+      elem = state.filteredNotes.find((note) => note.id === action.payload.id);
+      index = state.filteredNotes.findIndex(
+        (note) => note.id === action.payload.id
+      );
+      splicedArray = copy7[index].category
+      splicedArray.splice(action.payload.tagIndex,1)
+      copy7[index]= {...copy7[index], category: splicedArray}
+      console.log("Array: " + copy7[index].category);  
+      return {
+        ...state,
+        filteredNotes: copy7
       };
     default:
       return { ...state };

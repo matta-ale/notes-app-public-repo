@@ -10,6 +10,8 @@
 .filterPanel {
     background-color: rgba(0, 0, 0,0.8);
     width: 20%;
+    height: 100vh;
+    position: fixed;
 }
 
 .upperDiv {
@@ -34,6 +36,8 @@
     display: grid;
     grid-template-columns: repeat(auto-fit,390px);
     margin: 10px auto;
+    margin-left: 450px;
+    margin-top: 50px;
     justify-content: center;
     max-width: 1170px;
     height: auto;
@@ -59,4 +63,47 @@
     width: 100px; 
     height: auto;
     margin: 0 5px; 
+}
+
+.selectSection {
+    margin-top:70px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 200px;
+    height: 170px;
+    font-family: cursive;
+    font-size: 18px;
+}
+
+.select {
+    height: auto;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    color: black;
+    font-size: 18px;
+    font-family: cursive;
+    font-weight: bold;
+    /* background-color: #f0ed46; */
+    background-color: rgb(255, 225, 128);
+    box-shadow: 0 0 5px rgb(255, 225, 128);
+    border-radius: 5px;
+    margin-right: 5px;
+    margin-top: 0px;
+    padding-bottom: 4px;
+    cursor: pointer;
+}
+
+.select:focus {
+    outline: none;
+}
+
+.spanSelect {
+    display: flex;
+    flex-direction: column;
+}
+
+.spanSelect span {
+    margin-bottom: 10px;
 }

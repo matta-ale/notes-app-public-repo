@@ -1,4 +1,18 @@
-import { GET_FILTERED_NOTES, SET_USER, DELETE_NOTE, UPDATE_NOTE, ARCHIVE_NOTE, CREATE_NOTE, SET_IS_EDITING } from './types';
+import {
+  GET_FILTERED_NOTES,
+  SET_USER,
+  DELETE_NOTE,
+  UPDATE_NOTE,
+  ARCHIVE_NOTE,
+  CREATE_NOTE,
+  SET_IS_EDITING,
+  SET_STATUS_FILTERS,
+  SET_CATEGORY_FILTERS,
+  ADD_TAG_TO_NOTE,
+  SET_CATEGORIES_ARRAY,
+  DELETE_TAG
+} from './types';
+
 import axios from 'axios';
 
 export const setUserId = (userId) => {
@@ -18,7 +32,14 @@ export const getFilteredNotes = (URL) => {
         payload: data.data,
       });
     } catch (error) {
-      console.error(error);
+      if (error.response.data.error === 'No notes match that criteria') {
+        return dispatch({
+          type: GET_FILTERED_NOTES,
+          payload: [],
+        });
+      } else {
+        console.error(error);
+      }
     }
   };
 };
@@ -38,14 +59,19 @@ export const deleteNote = (id) => {
   };
 };
 
-export const updateNote = (id,editedTitle,editedDetail,UserId) => {
+export const updateNote = (id, editedTitle, editedDetail, UserId) => {
   return async (dispatch) => {
     try {
-      await axios.put(`notes/`,{id,title:editedTitle,detail:editedDetail,UserId});
+      await axios.put(`notes/`, {
+        id,
+        title: editedTitle,
+        detail: editedDetail,
+        UserId,
+      });
 
       return dispatch({
         type: UPDATE_NOTE,
-        payload: {id,editedTitle,editedDetail},
+        payload: { id, editedTitle, editedDetail },
       });
     } catch (error) {
       console.error(error);
@@ -70,12 +96,17 @@ export const archiveNote = (id) => {
 
 export const createNote = (UserId) => {
   return async (dispatch) => {
-    const title = 'Type a title'
-    const detail = 'Type a detail'
-    const category = []
-    
+    const title = 'Type a title';
+    const detail = 'Type a detail';
+    const category = [];
+
     try {
-      const {data} = await axios.post(`notes`,{title, detail,category,UserId});
+      let { data } = await axios.post(`notes`, {
+        title,
+        detail,
+        category,
+        UserId,
+      });
 
       return dispatch({
         type: CREATE_NOTE,
@@ -87,9 +118,44 @@ export const createNote = (UserId) => {
   };
 };
 
-export const setIsEditing = (id,status) => {
+export const setIsEditing = (id, status) => {
   return {
     type: SET_IS_EDITING,
-    payload: {id,status},
+    payload: { id, status },
+  };
+};
+
+export const setStatusFilter = (filters) => {
+  return {
+    type: SET_STATUS_FILTERS,
+    payload: filters,
+  };
+};
+
+export const setCategoryFilter = (filters) => {
+  return {
+    type: SET_CATEGORY_FILTERS,
+    payload: filters,
+  };
+};
+
+export const addTagToNote = (id,tag) => {
+  return {
+    type: ADD_TAG_TO_NOTE,
+    payload: {id,tag},
+  };
+};
+
+export const setCategoriesArray = (categoriesArray) => {
+  return {
+    type: SET_CATEGORIES_ARRAY,
+    payload: categoriesArray,
+  };
+};
+
+export const deleteTag = (id, tagIndex) => {
+  return {
+    type: DELETE_TAG,
+    payload: {id,tagIndex},
   };
 };

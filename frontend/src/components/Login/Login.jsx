@@ -23,6 +23,7 @@ export default function Login() {
       const { data } = await axios.post(URL,body);
       const { access,id } = data;
       dispatch(setUserId({userId:id,username:username}))
+      //sessionStorage.setItem('userData', JSON.stringify({userId:id,username:username}));
       setAccess(access);
       access && navigate('/home');
     } catch (error) {
@@ -52,10 +53,6 @@ export default function Login() {
       <div className={styles.titleContainer}>
         <div className={styles.loginAndRegister}>
           <h1>Please login</h1>
-          <div className={styles.register}>
-            <h3>or:</h3>
-            <button onClick={handleRegisterClick}>Register</button>
-          </div>
         </div>
         <img className={styles.loginImg} src={logo} alt="Login" />
       </div>

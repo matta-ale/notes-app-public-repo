@@ -10,31 +10,37 @@ import addtag from '../../assets/img/addtag.png';
 import saveChanges from '../../assets/img/saveChanges.png';
 import { deleteNote } from '../../redux/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { useState,useRef, useEffect } from 'react';
-import { updateNote, getFilteredNotes, archiveNote,setIsEditing } from '../../redux/actions';
+import { useState, useRef, useEffect } from 'react';
+import {
+  updateNote,
+  getFilteredNotes,
+  archiveNote,
+  setIsEditing,
+  addTagToNote,
+  deleteTag,
+  setCategoriesArray
+} from '../../redux/actions';
 import { urlMaker } from '../../helpers/urlMaker';
+import axios from 'axios'
 
 export default function Note(props) {
   // eslint-disable-next-line react/prop-types, no-unused-vars
   const dispatch = useDispatch();
   // eslint-disable-next-line no-unused-vars
-  const {
-    id,
-    title,
-    detail,
-    category,
-    isActive,
-    updatedAt,
-    UserId,
-  } = props;
+  const { id, title, detail, category, isActive, updatedAt, UserId } = props;
   const dateTime = DateTime.fromISO(updatedAt, { zone: 'utc' });
   //estados locales para modificar nota
-  
+  const notes = useSelector(state => state.filteredNotes)
+
   const [editedTitle, setEditedTitle] = useState(title);
   const [editedDetail, setEditedDetail] = useState(detail);
   const filters = useSelector((state) => state.filters);
-  const isEditing = useSelector(state => state.filteredNotes.find((note) => note.id === id)).isEditing
+  const isEditing = useSelector((state) =>
+    state.filteredNotes.find((note) => note.id === id)
+  ).isEditing;
   const titleInputRef = useRef(null);
+  const [newTag, setNewTag] = useState('');
+  const [isAddingTag, setIsAddingTag] = useState(false);
 
   const formattedDate = dateTime.setZone('utc-3').toLocaleString({
     year: 'numeric',
@@ -43,12 +49,12 @@ export default function Note(props) {
     hour: 'numeric',
     minute: 'numeric',
   });
-  
+
   useEffect(() => {
-    if(isEditing) {
+    if (isEditing) {
       titleInputRef.current.focus();
     }
-  },[isEditing])
+  }, [isEditing]);
 
   const handleDelete = async () => {
     try {
@@ -59,7 +65,7 @@ export default function Note(props) {
   };
 
   const handleEdit = async () => {
-    await dispatch(setIsEditing(id,true));
+    await dispatch(setIsEditing(id, true));
   };
 
   const handleSaveChanges = async () => {
@@ -71,7 +77,7 @@ export default function Note(props) {
     } catch (error) {
       window.alert(error.message);
     }
-    await dispatch(setIsEditing(id,false));
+    await dispatch(setIsEditing(id, false));
   };
 
   const handleArchive = async () => {
@@ -82,6 +88,37 @@ export default function Note(props) {
     } catch (error) {
       window.alert(error.message);
     }
+  };
+
+  const handleAddTag = async () => {
+    //agregar tag a los tags de la note
+    dispatch(addTagToNote(id, newTag));
+    let myNote = notes.find(item => item.id === id)
+    let body = {...myNote,category: myNote.category}
+    await axios.put('notes',body)
+    const URL = urlMaker(filters);
+    await dispatch(getFilteredNotes(URL));
+    setNewTag('');
+    setIsAddingTag(false);
+    //agregar tag si no está en el listado de tags
+  };
+
+  const handleDeleteTag = async (tagIndex) => {
+    await dispatch(deleteTag(id,tagIndex))
+    let myNote = notes.find(item => item.id === id)
+    console.log(myNote.category);
+    let body = {...myNote,category: myNote.category}
+    await axios.put('notes',body)
+    const URL = urlMaker(filters);
+    await dispatch(getFilteredNotes(URL));
+    let categoriesArray = ['All']
+      notes.forEach(note => {
+        note.category.forEach((tag => {
+          if(!categoriesArray.includes(tag)) categoriesArray.push(tag)
+        }))
+      })
+      await dispatch(setCategoriesArray(categoriesArray))
+
   }
 
   return (
@@ -93,7 +130,7 @@ export default function Note(props) {
               <p key={index} className={styles.tag}>
                 {tag}
               </p>
-              <button>
+              <button  onClick={() => handleDeleteTag(index)}>
                 <img src={deleteButton} alt='delete button' />
               </button>
             </div>
@@ -117,7 +154,27 @@ export default function Note(props) {
       ) : (
         <>
           <h2 className={styles.title}>{title}</h2>
-          <p className={styles.detail}>{detail}</p>
+
+          {isAddingTag ? (
+            <>
+              <div className={styles.addingTag}>
+                <input
+                  type='text'
+                  value={newTag}
+                  onChange={(e) => setNewTag(e.target.value)}
+                  placeholder='Enter new tag'
+                />
+                <div className={styles.addTagButtons}>
+                  <button onClick={handleAddTag}>Add</button>
+                  <button onClick={() => setIsAddingTag(false)}>Cancel</button>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <p className={styles.detail}>{detail}</p>
+            </>
+          )}
         </>
       )}
 
@@ -140,7 +197,7 @@ export default function Note(props) {
             <img src={edit} alt='edit button' />
             <span>Edit</span>
           </button>
-          <button>
+          <button onClick={() => setIsAddingTag(true)}>
             <img src={addtag} alt='add tag button' />
             <span>Add tag</span>
           </button>
