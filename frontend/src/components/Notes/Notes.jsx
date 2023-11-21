@@ -8,7 +8,7 @@ import {
   setIsEditing,
   setStatusFilter,
   setCategoriesArray,
-  setUserId
+  setUserId,
 } from '../../redux/actions';
 import logo from '../../assets/img/logo.png';
 import newNote from '../../assets/img/newNote.png';
@@ -21,30 +21,41 @@ export default function Notes() {
   const dispatch = useDispatch();
   const filters = useSelector((state) => state.filters);
   const categoryFilters = useSelector((state) => state.categoriesArray);
-  const [isFirstRender, setIsFirstRender] = useState(true)
-  //const storedUserData = sessionStorage.getItem('userData'); 
+  const [isFirstRender, setIsFirstRender] = useState(true);
+  const sessionStorageData = sessionStorage.getItem('userData');
+  const userDataObject = JSON.parse(sessionStorageData);
+
 
   useEffect(() => {
     async function run() {
+      console.log('Filters: ');
+      console.log(filters.userId);
       const URL = urlMaker(filters);
-      await dispatch(getFilteredNotes(URL)); 
-      //await dispatch(setUserId(storedUserData.userId))
-      
-    if (isFirstRender) {
-      let categoriesArray = ['All']
-      notes.forEach(note => {
-        note.category.forEach((tag => {
-          if(!categoriesArray.includes(tag)) categoriesArray.push(tag)
-        }))
-      })
-      await dispatch(setCategoriesArray(categoriesArray))
-      setIsFirstRender(false)
+      await dispatch(getFilteredNotes(URL));
+      if (userData.userId !== userDataObject.userId)
+        await dispatch(setUserId(userDataObject));
     }
-  }
-  run()
+    setTimeout(() => {
+      run();
+    }, 1000);
   }, [filters]);
 
-
+  useEffect(() => {
+    if (isFirstRender) {
+      let categoriesArray = ['All'];
+      console.log(notes);
+      notes.forEach((note) => {
+        note.category.forEach((tag) => {
+          console.log(tag);
+          if (!categoriesArray.includes(tag)) categoriesArray.push(tag);
+        });
+      });
+      console.log('Notes:' + notes);
+      console.log(categoriesArray);
+      dispatch(setCategoriesArray(categoriesArray));
+      setIsFirstRender(false);
+    }
+  }, [notes]);
 
   const handleNewNote = async () => {
     await dispatch(createNote(userData.userId));
@@ -95,32 +106,32 @@ export default function Notes() {
           <div className={styles.filtersDiv}>
             <div className={styles.selectSection}>
               <div className={styles.spanSelect}>
-              <span>Filter by status: </span>
-              <select
-                name='statusFilter'
-                className={styles.select}
-                onChange={handleFilters}
-              >
-                <option value='active'>Active</option>
-                <option value='archived'>Archived</option>
-                <option value='all'>All</option>
-              </select>
+                <span>Filter by status: </span>
+                <select
+                  name='statusFilter'
+                  className={styles.select}
+                  onChange={handleFilters}
+                >
+                  <option value='active'>Active</option>
+                  <option value='archived'>Archived</option>
+                  <option value='all'>All</option>
+                </select>
               </div>
               <div className={styles.spanSelect}>
-              <span>Filter by tag: </span>
-              <select
-                name='categoryFilter'
-                className={styles.select}
-                onChange={handleFilters}
-              >
-                {categoryFilters.map((item, index) => {
-                  return (
-                    <option key={index} value={item}>
-                      {item}
-                    </option>
-                  );
-                })}
-              </select>
+                <span>Filter by tag: </span>
+                <select
+                  name='categoryFilter'
+                  className={styles.select}
+                  onChange={handleFilters}
+                >
+                  {categoryFilters.map((item, index) => {
+                    return (
+                      <option key={index} value={item}>
+                        {item}
+                      </option>
+                    );
+                  })}
+                </select>
               </div>
             </div>
           </div>
