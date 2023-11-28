@@ -1,6 +1,7 @@
 import {
   GET_FILTERED_NOTES,
-  SET_USER,
+  LOGIN,
+  LOGOUT,
   DELETE_NOTE,
   UPDATE_NOTE,
   ARCHIVE_NOTE,
@@ -10,20 +11,26 @@ import {
   SET_CATEGORY_FILTERS,
   ADD_TAG_TO_NOTE,
   SET_CATEGORIES_ARRAY,
-  DELETE_TAG
+  DELETE_TAG,
+  ADD_CREATING_NOTE,
 } from './types';
 
 import axios from 'axios';
 
-export const setUserId = (userId) => {
+export const login = (user) => {
   return {
-    type: SET_USER,
-    payload: userId,
+    type: LOGIN,
+    payload: user,
+  };
+};
+
+export const logout = () => {
+  return {
+    type: LOGOUT,
   };
 };
 
 export const getFilteredNotes = (URL) => {
-  console.log(URL);
   return async (dispatch) => {
     try {
       const { data } = await axios.get(URL);
@@ -94,11 +101,8 @@ export const archiveNote = (id) => {
   };
 };
 
-export const createNote = (UserId) => {
+export const createNote = (title,detail,category,UserId) => {
   return async (dispatch) => {
-    const title = 'Type a title';
-    const detail = 'Type a detail';
-    const category = [];
 
     try {
       let { data } = await axios.post(`notes`, {
@@ -139,11 +143,25 @@ export const setCategoryFilter = (filters) => {
   };
 };
 
-export const addTagToNote = (id,tag) => {
-  return {
-    type: ADD_TAG_TO_NOTE,
-    payload: {id,tag},
-  };
+export const addTagToNote = (id, tag, body) => {
+  try {
+
+    return async (dispatch) => {
+      let categoryArray = body.category
+      categoryArray.push(tag)
+      body.category = categoryArray
+      await axios.post('categories',{category:tag})
+      console.log('Llegó 1');
+      await axios.put('notes', body);
+      return dispatch({
+        type: ADD_TAG_TO_NOTE,
+        payload: { id, tag },
+      });
+    };
+  // eslint-disable-next-line no-unreachable
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export const setCategoriesArray = (categoriesArray) => {
@@ -156,6 +174,25 @@ export const setCategoriesArray = (categoriesArray) => {
 export const deleteTag = (id, tagIndex) => {
   return {
     type: DELETE_TAG,
-    payload: {id,tagIndex},
+    payload: { id, tagIndex },
+  };
+};
+
+export const addCreatingNote = (UserId) => {
+  const currentDate = new Date();
+  const formattedDate = currentDate.toISOString();
+  return {
+    type: ADD_CREATING_NOTE,
+    payload: {
+      id: '1',
+      title: 'Type new title...',
+      detail: 'Type new detail...',
+      category: [],
+      isActive: true,
+      createdAt: formattedDate,
+      updatedAt: formattedDate,
+      UserId: UserId,
+      isEditing: true,
+    },
   };
 };

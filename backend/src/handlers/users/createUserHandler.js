@@ -16,7 +16,7 @@ const createUserHandler = async (data) => {
         409
       );
     } else {
-      const created = await User.create(data);
+      const created = await User.create(data,{returning: true});
       return created;
     }
   } catch (error) {

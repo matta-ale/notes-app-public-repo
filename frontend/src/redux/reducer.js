@@ -1,6 +1,7 @@
 import {
   GET_FILTERED_NOTES,
-  SET_USER,
+  LOGIN,
+  LOGOUT,
   DELETE_NOTE,
   UPDATE_NOTE,
   ARCHIVE_NOTE,
@@ -11,18 +12,19 @@ import {
   ADD_TAG_TO_NOTE,
   SET_CATEGORIES_ARRAY,
   DELETE_TAG,
+  ADD_CREATING_NOTE,
 } from './types';
 
 const initialState = {
   filteredNotes: [],
   filters: {
-    userId: '',
+    userId: null,
     isActive: true,
     category: 'all',
     page: 1,
     pageSize: 100,
   },
-  userId: { userId: '', username: '' },
+  user: null,
   categoriesArray: [
     'All',
     //   'Kids',
@@ -33,6 +35,7 @@ const initialState = {
     //   'Personal',
     //   'Study',
   ],
+  isCreating: false,
 };
 
 export const notesReducer = (state = initialState, action) => {
@@ -42,17 +45,25 @@ export const notesReducer = (state = initialState, action) => {
   let copy4 = [];
   let copy5 = [];
   let copy6 = [];
-  let copy7 = []
-  let splicedArray = []
+  let copy7 = [];
+  let copy8 = [];
+  let splicedArray = [];
   let elem;
   let index;
   let tagElem;
   switch (action.type) {
-    case SET_USER:
+    case LOGIN:
       return {
         ...state,
-        userId: action.payload,
-        filters: { ...state.filters, userId: action.payload },
+        user: action.payload,
+        filters: { ...state.filters, userId: action.payload.userId },
+      };
+
+    case LOGOUT:
+      return {
+        ...state,
+        user: null,
+        filters: { ...state.filters, userId: null },
       };
 
     case GET_FILTERED_NOTES:
@@ -104,6 +115,7 @@ export const notesReducer = (state = initialState, action) => {
       return {
         ...state,
         filteredNotes: copy3,
+        isCreating: false,
       };
 
     case ARCHIVE_NOTE:
@@ -150,7 +162,10 @@ export const notesReducer = (state = initialState, action) => {
 
     case ADD_TAG_TO_NOTE:
       copy6 = state.filteredNotes;
+      console.log('Copy6: ', copy6);
+      console.log(action.payload.id);
       elem = state.filteredNotes.find((note) => note.id === action.payload.id);
+      console.log('Elem: ',elem);
       index = state.filteredNotes.findIndex(
         (note) => note.id === action.payload.id
       );
@@ -164,6 +179,7 @@ export const notesReducer = (state = initialState, action) => {
           category: [...copy6[index].category, action.payload.tag],
         };
       }
+      console.log('Llegó 2');
       return {
         ...state,
         filteredNotes: copy6,
@@ -176,18 +192,27 @@ export const notesReducer = (state = initialState, action) => {
       };
 
     case DELETE_TAG:
-      copy7 = state.filteredNotes
+      copy7 = state.filteredNotes;
       elem = state.filteredNotes.find((note) => note.id === action.payload.id);
       index = state.filteredNotes.findIndex(
         (note) => note.id === action.payload.id
       );
-      splicedArray = copy7[index].category
-      splicedArray.splice(action.payload.tagIndex,1)
-      copy7[index]= {...copy7[index], category: splicedArray}
-      console.log("Array: " + copy7[index].category);  
+      splicedArray = copy7[index].category;
+      splicedArray.splice(action.payload.tagIndex, 1);
+      copy7[index] = { ...copy7[index], category: splicedArray };
+      console.log('Array: ' + copy7[index].category);
       return {
         ...state,
-        filteredNotes: copy7
+        filteredNotes: copy7,
+      };
+
+    case ADD_CREATING_NOTE:
+      copy8 = state.filteredNotes;
+      copy8.unshift(action.payload);
+      return {
+        ...state,
+        filteredNotes: copy8,
+        isCreating:true
       };
     default:
       return { ...state };

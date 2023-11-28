@@ -4,14 +4,15 @@ import {useNavigate} from 'react-router-dom'
 import {validation} from './validation'
 import logo from '../../assets/img/logo.png'
 import axios from 'axios'
-import { useDispatch, useSelector } from 'react-redux';
-import { setUserId } from '../../redux/actions';
+import { useDispatch} from 'react-redux';
+import { login } from '../../redux/actions';
 
 export default function Login() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [userData,setUserData] = useState({username:'',password:''})
   const [errors,setErrors] = useState({username:'',password:''})
+  // eslint-disable-next-line no-unused-vars
   const [access, setAccess] = useState(false);
   const {VITE_BACKEND_URL} = import.meta.env
 
@@ -22,8 +23,8 @@ export default function Login() {
       const URL = VITE_BACKEND_URL + '/users/login';
       const { data } = await axios.post(URL,body);
       const { access,id } = data;
-      dispatch(setUserId({userId:id,username:username}))
-      //sessionStorage.setItem('userData', JSON.stringify({userId:id,username:username}));
+      dispatch(login({userId:id,username:username}))
+      localStorage.setItem('userData', JSON.stringify({userId:id,username:username}));
       setAccess(access);
       access && navigate('/home');
     } catch (error) {
@@ -53,6 +54,10 @@ export default function Login() {
       <div className={styles.titleContainer}>
         <div className={styles.loginAndRegister}>
           <h1>Please login</h1>
+          <div className={styles.register}>
+            <h3>or</h3>
+            <button onClick={handleRegisterClick}>register</button>
+          </div>
         </div>
         <img className={styles.loginImg} src={logo} alt="Login" />
       </div>

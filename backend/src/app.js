@@ -5,6 +5,7 @@ const morgan = require("morgan");
 // importo los archivos routers
 const usersRouter = require("./routes/usersRouter");
 const notesRouter = require("./routes/notesRouter");
+const categoriesRouter = require("./routes/categoriesRouter");
 
 
 const server = express();
@@ -27,6 +28,7 @@ server.use((req, res, next) => {
 //declaro los middlewares con los archivos routers
 server.use("/", usersRouter);
 server.use("/", notesRouter);
+server.use("/", categoriesRouter);
 
 // Error catching endware.
 server.use((err, req, res, next) => {
