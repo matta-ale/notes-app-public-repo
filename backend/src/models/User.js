@@ -13,6 +13,7 @@ module.exports = (sequelize) => {
       username: {
         type: DataTypes.STRING,
         allowNull: false,
+        len:[6,14]
       },
       password: {
         type: DataTypes.STRING,

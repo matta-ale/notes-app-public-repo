@@ -3,15 +3,12 @@ const Sequelize = require('sequelize');
 const CustomError = require('../../utils/customError');
 
 const createCategoryHandler = async (data) => {
-  const { category } = data;
-
+  const { name } = data;
+  console.log(data);
   try {
-    const foundCategory = await Category.findOne({ where: { category } });
+    const foundCategory = await Category.findOne({ where: { name} });
     if (foundCategory) {
-      throw new CustomError(
-        'Category already in database',
-        409
-      );
+      return foundCategory
     } else {
       const created = await Category.create(data,{returning: true});
       return created;

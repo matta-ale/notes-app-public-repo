@@ -10,7 +10,7 @@ module.exports = (sequelize) => {
         primaryKey: true,
         defaultValue: Sequelize.UUIDV4,
       },
-      category: {
+      name: {
         type: DataTypes.STRING,
         allowNull: false,
       },

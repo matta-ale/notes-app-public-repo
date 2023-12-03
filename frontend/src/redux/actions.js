@@ -101,9 +101,8 @@ export const archiveNote = (id) => {
   };
 };
 
-export const createNote = (title,detail,category,UserId) => {
+export const createNote = (title, detail, category, UserId) => {
   return async (dispatch) => {
-
     try {
       let { data } = await axios.post(`notes`, {
         title,
@@ -145,20 +144,17 @@ export const setCategoryFilter = (filters) => {
 
 export const addTagToNote = (id, tag, body) => {
   try {
-
     return async (dispatch) => {
-      let categoryArray = body.category
-      categoryArray.push(tag)
-      body.category = categoryArray
-      await axios.post('categories',{category:tag})
-      console.log('Llegó 1');
+      const { data } = await axios.post('categories', { name: tag });
+      body.category = data.id;
+      body.action = 'add';
       await axios.put('notes', body);
       return dispatch({
         type: ADD_TAG_TO_NOTE,
         payload: { id, tag },
       });
     };
-  // eslint-disable-next-line no-unreachable
+    // eslint-disable-next-line no-unreachable
   } catch (error) {
     console.error(error);
   }
@@ -171,11 +167,21 @@ export const setCategoriesArray = (categoriesArray) => {
   };
 };
 
-export const deleteTag = (id, tagIndex) => {
-  return {
-    type: DELETE_TAG,
-    payload: { id, tagIndex },
-  };
+export const deleteTag = (id, body, tagId) => {
+  try {
+    return async (dispatch) => {
+      body.category = tagId;
+      body.action = 'remove';
+      await axios.put('notes', body);
+      return dispatch({
+        type: DELETE_TAG,
+        payload: { id, body, tagId },
+      });
+    };
+  // eslint-disable-next-line no-unreachable
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export const addCreatingNote = (UserId) => {

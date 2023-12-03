@@ -162,24 +162,20 @@ export const notesReducer = (state = initialState, action) => {
 
     case ADD_TAG_TO_NOTE:
       copy6 = state.filteredNotes;
-      console.log('Copy6: ', copy6);
-      console.log(action.payload.id);
       elem = state.filteredNotes.find((note) => note.id === action.payload.id);
-      console.log('Elem: ',elem);
       index = state.filteredNotes.findIndex(
         (note) => note.id === action.payload.id
       );
       //está la tag ya en esa note?
-      tagElem = elem.category.find(
-        (category) => category === action.payload.tag
+      tagElem = elem.Categories.find(
+        (category) => category.name === action.payload.tag
       );
       if (!tagElem) {
         copy6[index] = {
           ...copy6[index],
-          category: [...copy6[index].category, action.payload.tag],
+          Categories: [...copy6[index].Categories, {name:action.payload.tag}],
         };
       }
-      console.log('Llegó 2');
       return {
         ...state,
         filteredNotes: copy6,
@@ -197,10 +193,9 @@ export const notesReducer = (state = initialState, action) => {
       index = state.filteredNotes.findIndex(
         (note) => note.id === action.payload.id
       );
-      splicedArray = copy7[index].category;
+      splicedArray = copy7[index].Categories;
       splicedArray.splice(action.payload.tagIndex, 1);
-      copy7[index] = { ...copy7[index], category: splicedArray };
-      console.log('Array: ' + copy7[index].category);
+      copy7[index] = { ...copy7[index], Categories: splicedArray };
       return {
         ...state,
         filteredNotes: copy7,

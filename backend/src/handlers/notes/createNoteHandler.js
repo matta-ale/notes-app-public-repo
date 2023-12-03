@@ -1,10 +1,12 @@
-const { Note } = require('../../db');
+const { Note, Category } = require('../../db');
 const Sequelize = require('sequelize');
 const CustomError = require('../../utils/customError');
 
 const createNoteHandler = async (data) => {
   try {
-    const createdNote = await Note.create(data);
+    const createdNote = await Note.create(data,{
+      include: [Category], 
+    });
     return createdNote;
   } catch (error) {
     if (error instanceof CustomError) {

@@ -19,17 +19,15 @@ import {
   setIsEditing,
   addTagToNote,
   deleteTag,
-  setCategoriesArray,
 } from '../../redux/actions';
 import { urlMaker } from '../../helpers/urlMaker';
-import axios from 'axios';
 import Loading from '../Loading/Loading';
 
 export default function Note(props) {
   // eslint-disable-next-line react/prop-types, no-unused-vars
   const dispatch = useDispatch();
   // eslint-disable-next-line no-unused-vars
-  const { id, title, detail, category, isActive, updatedAt, UserId } = props;
+  const { id, title, detail, Categories, isActive, updatedAt, UserId } = props;
   const dateTime = DateTime.fromISO(updatedAt, { zone: 'utc' });
   //estados locales para modificar nota
   const notes = useSelector((state) => state.filteredNotes);
@@ -44,6 +42,8 @@ export default function Note(props) {
   const titleInputRef = useRef(null);
   const [newTag, setNewTag] = useState('');
   const [isAddingTag, setIsAddingTag] = useState(false);
+  // eslint-disable-next-line no-unused-vars
+  const [forceRender, setForceRender] = useState(false)
 
   const formattedDate = dateTime.setZone('utc-3').toLocaleString({
     year: 'numeric',
@@ -64,6 +64,7 @@ export default function Note(props) {
       setIsLoading(true);
       await dispatch(deleteNote(id));
       setIsLoading(false);
+      setForceRender((prev) => !prev);
     } catch (error) {
       window.alert(error.message);
     }
@@ -123,20 +124,14 @@ export default function Note(props) {
   };
 
   const handleDeleteTag = async (tagIndex) => {
-    await dispatch(deleteTag(id, tagIndex));
+    setIsLoading(true);
     let myNote = notes.find((item) => item.id === id);
-    console.log(myNote.category);
-    let body = { ...myNote, category: myNote.category };
-    await axios.put('notes', body);
+    const tagId = myNote.Categories[tagIndex].id
+    await dispatch(deleteTag(id, myNote, tagId));
+    // await axios.put('notes', body);
     const URL = urlMaker(filters);
     await dispatch(getFilteredNotes(URL));
-    let categoriesArray = ['All'];
-    notes.forEach((note) => {
-      note.category.forEach((tag) => {
-        if (!categoriesArray.includes(tag)) categoriesArray.push(tag);
-      });
-    });
-    await dispatch(setCategoriesArray(categoriesArray));
+    setIsLoading(false);
   };
 
   return (
@@ -146,11 +141,11 @@ export default function Note(props) {
       ) : (
         <>
           <div className={styles.tags}>
-            {Array.isArray(category) &&
-              category.map((tag, index) => (
+            {Array.isArray(Categories) &&
+              Categories.map((tag, index) => (
                 <div key={index} className={styles.tagContainer}>
                   <p key={index} className={styles.tag}>
-                    {tag}
+                    {tag.name}
                   </p>
                   <button onClick={() => handleDeleteTag(index)}>
                     <img src={deleteButton} alt='delete button' />

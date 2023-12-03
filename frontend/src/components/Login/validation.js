@@ -11,6 +11,6 @@ export function validation(userData) {
     if(userData.username.length < 6 || userData.username.length > 14) errors.username = "Username must have between 6 and 14 characters"
 
     if (!regexPassword.test(userData.password)) errors.password = "Password must have at least one special character, uppercase and lowercase letter"
-    if (userData.password.length < 6 || userData.password.length > 10) errors.password = "Password must have between 6 an 10 characters"
+    if (userData.password.length < 6 || userData.password.length > 14) errors.password = "Password must have between 6 and 14 characters"
     return errors
 }

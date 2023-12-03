@@ -1,16 +1,25 @@
-const { Note } = require('../../db');
+const { Note, Category } = require('../../db');
 const CustomError = require('../../utils/customError');
 
 const updateNoteHandler = async (data) => {
-  const { id } = data;
-
+  const { id, category, action } = data;
+  
   try {
-    const updated = await Note.update(data, {
+    const existingNote = await Note.findByPk(id);
+    if (!existingNote) {
+      throw new CustomError(`Note with id ${id} not found`, 404);
+    } else {
+    await Note.update(data, {
       where: { id:id}, return: true, raw:true,
     });
-    if (updated[0]===0) {
-      throw new CustomError(`Can't update note with id ${id}`, 400);
-    } else {
+    if (category && action === 'add') {
+      const updatedNote = await Note.findByPk(id);
+      await updatedNote.addCategories(category);
+    } else if (category && action === 'remove') {
+      const updatedNote = await Note.findByPk(id);
+      await updatedNote.removeCategories(category);
+    }
+
       return `Note with id ${id} succesfully updated`;
     }
   } catch (error) {
@@ -19,3 +28,4 @@ const updateNoteHandler = async (data) => {
 };
 
 module.exports = updateNoteHandler;
+

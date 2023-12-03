@@ -14,6 +14,7 @@ import {
 import logo from '../../assets/img/logo.png';
 import logoutImage from '../../assets/img/logout.png';
 import { urlMaker } from '../../helpers/urlMaker';
+import axios from 'axios'
 //import { categoryFilters } from '../../helpers/categoryFilters';
 
 export default function Notes() {
@@ -25,7 +26,7 @@ export default function Notes() {
   const dispatch = useDispatch();
   const filters = useSelector((state) => state.filters);
   const categoryFilters = useSelector((state) => state.categoriesArray);
-  const [isFirstRender, setIsFirstRender] = useState(true);
+  //const [isFirstRender, setIsFirstRender] = useState(true);
   const localStorageData = localStorage.getItem('userData');
   const userDataObject = JSON.parse(localStorageData);
   const navigate = useNavigate();
@@ -36,33 +37,34 @@ export default function Notes() {
 
   useEffect(() => {
     async function run() {
+      if(filters.userId) {
       const URL = urlMaker(filters);
       await dispatch(getFilteredNotes(URL));
+      }
     }
     run();
   }, [filters]);
 
   useEffect(() => {
-    if (isFirstRender) {
-      let categoriesArray = ['All'];
-      notes.forEach((note) => {
-        note.category.forEach((tag) => {
-          if (!categoriesArray.includes(tag)) categoriesArray.push(tag);
-        });
-      });
-      dispatch(setCategoriesArray(categoriesArray));
-      setIsFirstRender(false);
+    async function run() {
+        let noteArray = []
+        await notes.forEach(note => {
+          noteArray.push(note.id)
+        })
+        let categoriesArray = ['All'];
+        const {data} = await axios.post('categoriesbynote',{notes:noteArray})
+        console.log();
+        await data.forEach(tag => {
+          categoriesArray.push(tag.name)
+        })
+        dispatch(setCategoriesArray(categoriesArray));
     }
-    
-  }, [notes]);
+    run();
+  }, [notes, notes.Categories]);
 
   const handleNewNote = async () => {
     await dispatch(addCreatingNote(userData.userId))
     setForceRender((prev) => !prev);
-    // const URL = urlMaker(filters);
-    // await dispatch(getFilteredNotes(URL));
-    //const noteId = notes[notes.length - 1].id;
-    //await dispatch(setIsEditing(noteId, true));
   };
 
   const handleFilters = async (event) => {
@@ -88,6 +90,7 @@ export default function Notes() {
       filterValue = value;
       filtersCopy = { ...filtersCopy, category: filterValue };
     }
+    console.log(filtersCopy);
     dispatch(setStatusFilter(filtersCopy));
   };
 
@@ -160,7 +163,7 @@ export default function Notes() {
                   id={note.id}
                   title={note.title}
                   detail={note.detail}
-                  category={note.category}
+                  Categories={note.Categories}
                   isActive={note.isActive}
                   createdAt={note.createdAt}
                   updatedAt={note.updatedAt}

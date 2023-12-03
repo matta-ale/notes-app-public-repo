@@ -54,6 +54,9 @@ User.hasMany(Note);
 Note.belongsTo(User);
 Note.belongsToMany(Category, { through: 'NoteCategory' });
 Category.belongsToMany(Note, { through: 'NoteCategory' });
+User.belongsToMany(Category, { through: 'UserCategory' });
+Category.belongsToMany(User, { through: 'UserCategory' });
+
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');

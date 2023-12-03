@@ -17,11 +17,6 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      category: {
-        type: DataTypes.ARRAY(DataTypes.STRING),
-        allowNull: true,
-        defaultValue: []
-      },
       isActive: {
         type: DataTypes.BOOLEAN,
         allowNull: true,
