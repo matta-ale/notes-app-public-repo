@@ -5,6 +5,7 @@
     padding: 0;
     height: auto;
     color: white;
+    min-height:100vh;
 }
 
 .filterPanel {
@@ -21,6 +22,7 @@
 .rightPanel {
     display: flex;
     flex-direction: column;
+
 }
 
 .navbar {
@@ -175,4 +177,30 @@
     margin: 30px 0px;
     font-weight:600;
     font-size: 24px
+}
+
+.loadingDiv {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: -85px;
+}
+
+.loadingBackground {
+    background-color: black;
+    opacity: 60%;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content:center;
+    align-items: center;
+    height: 270px;
+}
+
+.loadingBackground h3 {
+    margin-top: 50px;
+    margin-bottom: -40px;
+    opacity: 100%;
 }

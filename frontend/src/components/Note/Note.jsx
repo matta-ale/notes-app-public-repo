@@ -115,12 +115,12 @@ export default function Note(props) {
     setIsLoading(true);
     let myNote = notes.find((item) => item.id === id);
     await dispatch(addTagToNote(id, newTag, myNote));
+    setIsAddingTag(false);
+    setNewTag('');
+    setForceRender((prev) => !prev);
     const URL = urlMaker(filters);
     await dispatch(getFilteredNotes(URL));
-    setNewTag('');
-    setIsAddingTag(false);
     setIsLoading(false);
-    //agregar tag si no está en el listado de tags
   };
 
   const handleDeleteTag = async (tagIndex) => {
@@ -128,7 +128,6 @@ export default function Note(props) {
     let myNote = notes.find((item) => item.id === id);
     const tagId = myNote.Categories[tagIndex].id
     await dispatch(deleteTag(id, myNote, tagId));
-    // await axios.put('notes', body);
     const URL = urlMaker(filters);
     await dispatch(getFilteredNotes(URL));
     setIsLoading(false);

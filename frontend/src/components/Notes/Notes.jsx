@@ -14,14 +14,16 @@ import {
 import logo from '../../assets/img/logo.png';
 import logoutImage from '../../assets/img/logout.png';
 import { urlMaker } from '../../helpers/urlMaker';
-import axios from 'axios'
+import axios from 'axios';
+import Loading from '../Loading/Loading';
+
 //import { categoryFilters } from '../../helpers/categoryFilters';
 
 export default function Notes() {
   const notes = useSelector((state) => state.filteredNotes);
   // eslint-disable-next-line no-unused-vars
   const [forceRender, setForceRender] = useState(false); //esto es solo para forzar un re render. Cambiar un local state fuerza un re render
-  //const isCreating = useSelector((state) => state.isCreating);
+  const [isLoading, setIsLoading] = useState(false);
   const userData = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const filters = useSelector((state) => state.filters);
@@ -37,9 +39,11 @@ export default function Notes() {
 
   useEffect(() => {
     async function run() {
-      if(filters.userId) {
-      const URL = urlMaker(filters);
-      await dispatch(getFilteredNotes(URL));
+      if (filters.userId) {
+        const URL = urlMaker(filters);
+        setIsLoading(true);
+        await dispatch(getFilteredNotes(URL));
+        setIsLoading(false);
       }
     }
     run();
@@ -47,23 +51,25 @@ export default function Notes() {
 
   useEffect(() => {
     async function run() {
-        let noteArray = []
-        await notes.forEach(note => {
-          noteArray.push(note.id)
-        })
-        let categoriesArray = ['All'];
-        const {data} = await axios.post('categoriesbynote',{notes:noteArray})
-        console.log();
-        await data.forEach(tag => {
-          categoriesArray.push(tag.name)
-        })
-        dispatch(setCategoriesArray(categoriesArray));
+      let noteArray = [];
+      await notes.forEach((note) => {
+        noteArray.push(note.id);
+      });
+      let categoriesArray = ['All'];
+      const { data } = await axios.post('categoriesbynote', {
+        notes: noteArray,
+      });
+      console.log();
+      await data.forEach((tag) => {
+        categoriesArray.push(tag.name);
+      });
+      dispatch(setCategoriesArray(categoriesArray));
     }
     run();
   }, [notes, notes.Categories]);
 
   const handleNewNote = async () => {
-    await dispatch(addCreatingNote(userData.userId))
+    await dispatch(addCreatingNote(userData.userId));
     setForceRender((prev) => !prev);
   };
 
@@ -150,28 +156,42 @@ export default function Notes() {
             </button>
           </div>
         </div>
-        {notes.length === 0 ? (
-          <div className={styles.notesContainer}>
-            <div className={styles.noNotes}><h1 className={styles.title}></h1>No notes! Create a new one...</div>
+        {isLoading ? (
+          <div className={styles.loadingDiv}>
+            <div className={styles.loadingBackground}>
+              <h3>Loading...</h3>
+              <Loading></Loading>
+            </div>
           </div>
         ) : (
-          <div className={styles.notesContainer}>
-            {notes.map((note) => {
-              return (
-                <Note
-                  key={note.id}
-                  id={note.id}
-                  title={note.title}
-                  detail={note.detail}
-                  Categories={note.Categories}
-                  isActive={note.isActive}
-                  createdAt={note.createdAt}
-                  updatedAt={note.updatedAt}
-                  UserId={userData?.userId}
-                />
-              );
-            })}
-          </div>
+          <>
+            {notes.length === 0 ? (
+              <div className={styles.notesContainer}>
+                <div className={styles.noNotes}>
+                  <h1 className={styles.title}></h1>No notes! Create a new
+                  one...
+                </div>
+              </div>
+            ) : (
+              <div className={styles.notesContainer}>
+                {notes.map((note) => {
+                  return (
+                    <Note
+                      key={note.id}
+                      id={note.id}
+                      title={note.title}
+                      detail={note.detail}
+                      Categories={note.Categories}
+                      isActive={note.isActive}
+                      createdAt={note.createdAt}
+                      updatedAt={note.updatedAt}
+                      UserId={userData?.userId}
+                    />
+                  );
+                })}
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
