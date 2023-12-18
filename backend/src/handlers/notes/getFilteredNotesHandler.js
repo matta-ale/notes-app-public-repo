@@ -9,12 +9,7 @@ const getFilteredNotesHandler = async (data) => {
   const offset = (page - 1) * pageSize;
 
   if (isActive) filterCriteria.isActive = isActive;
-  if (category)
-    filterCriteria['$Categories.id$'] = {
-      [Op.contains]: [category],
-    };
   if (UserId) filterCriteria.UserId = UserId;
-
   try {
     const notes = await Note.findAndCountAll({
       where: filterCriteria,
@@ -23,10 +18,20 @@ const getFilteredNotesHandler = async (data) => {
       limit: pageSize,
       include: {
         model: Category,
+        as: 'Categories',
         attributes: ['id', 'name'],
         through: {
           attributes: [],
         },
+        ...(category !== 'all' && category !== undefined
+          ? {
+              where: {
+                name: {
+                  [Op.iLike]: `%${category}%`, // Adjust based on your needs
+                },
+              },
+            }
+          : {}),
       },
     });
     if (notes.rows.length === 0)

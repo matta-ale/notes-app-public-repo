@@ -52,7 +52,8 @@ const { User, Note, Category } =
 // Aca vendrian las relaciones
 User.hasMany(Note);
 Note.belongsTo(User);
-Note.belongsToMany(Category, { through: 'NoteCategory' });
+//Note.belongsToMany(Category, { through: 'NoteCategory' });
+Note.belongsToMany(Category, { through: 'NoteCategory', as: 'Categories' });
 Category.belongsToMany(Note, { through: 'NoteCategory' });
 User.belongsToMany(Category, { through: 'UserCategory' });
 Category.belongsToMany(User, { through: 'UserCategory' });

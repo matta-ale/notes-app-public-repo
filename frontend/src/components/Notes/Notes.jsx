@@ -96,7 +96,6 @@ export default function Notes() {
       filterValue = value;
       filtersCopy = { ...filtersCopy, category: filterValue };
     }
-    console.log(filtersCopy);
     dispatch(setStatusFilter(filtersCopy));
   };
 

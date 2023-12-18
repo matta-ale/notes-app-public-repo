@@ -5,7 +5,10 @@ const CustomError = require('../../utils/customError');
 const getCategoriesByNoteIdHandler = async (noteId) => {
   try {
     const note = await Note.findByPk(noteId, {
-      include: Category,
+      include: {
+        model: Category,
+        as: 'Categories',
+      }
     });
     if (!note) {
       throw new CustomError(`Note with id ${noteId} not found`, 404);
