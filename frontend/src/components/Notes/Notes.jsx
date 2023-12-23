@@ -42,6 +42,7 @@ export default function Notes() {
       if (filters.userId) {
         const URL = urlMaker(filters);
         setIsLoading(true);
+        console.log(URL);
         await dispatch(getFilteredNotes(URL));
         setIsLoading(false);
       }

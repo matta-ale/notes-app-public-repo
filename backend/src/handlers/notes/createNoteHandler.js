@@ -5,7 +5,10 @@ const CustomError = require('../../utils/customError');
 const createNoteHandler = async (data) => {
   try {
     const createdNote = await Note.create(data,{
-      include: [Category], 
+      include: [{
+        model: Category,
+        as: 'Categories', 
+      }], 
     });
     return createdNote;
   } catch (error) {

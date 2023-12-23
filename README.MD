@@ -1,12 +1,9 @@
 By Alexis Mattaruco
 
-Note: Everything should be working except retrieving the list of tags for the options of the tag filter dropdown.
-      I ran out of time debugging that error, my intention was to update that list with every tag available in the database. I believe it's some conflict with the timing of the rendering. 
-
 Data for login:
 
-username:Ensolvers
-password: Ensolv23!
+username: Alexis
+password: Alexisdev74!
 
 
 Technologies used:
