@@ -36,20 +36,20 @@ server.use("/", categoriesRouter);
 
 //para deploy
 
-// const __dirname2 = path.dirname("")
-// const buildPath = path.join(__dirname2, "../frontend/dist")
-// server.use(express.static(buildPath))
-// const indexPath = path.resolve(__dirname2, "../frontend/dist/index.html");
-// server.get("/*", function(req,res) {
-//   res.sendFile(
-//     indexPath,
-//     function(err) {
-//       if(err) {
-//         res.status(500).send(err)
-//       }
-//     }
-//   )
-// })
+const __dirname2 = path.dirname("")
+const buildPath = path.join(__dirname2, "../frontend/dist")
+server.use(express.static(buildPath))
+const indexPath = path.resolve(__dirname2, "../frontend/dist/index.html");
+server.get("/*", function(req,res) {
+  res.sendFile(
+    indexPath,
+    function(err) {
+      if(err) {
+        res.status(500).send(err)
+      }
+    }
+  )
+})
 
 
 // Error catching endware.
