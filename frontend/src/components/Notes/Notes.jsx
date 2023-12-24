@@ -109,6 +109,15 @@ export default function Notes() {
   return (
     <div className={styles.container}>
       <div className={styles.filterPanel}>
+        <div className={styles.navbar}>
+          <div className={styles.welcomeLogout}>
+            <h2>{userData?.username}</h2>
+            <button className={styles.logoutButton} onClick={handleLogout}>
+              <img src={logoutImage} alt='logout button' />
+              <span>Logout</span>
+            </button>
+          </div>
+        </div>
         <div className={styles.filtersDiv}>
           <button className={styles.newNoteButton} onClick={handleNewNote}>
             <img src={logo} alt='new note button' />
@@ -147,15 +156,6 @@ export default function Notes() {
         </div>
       </div>
       <div className={styles.rightPanel}>
-        <div className={styles.navbar}>
-          <div className={styles.welcomeLogout}>
-            <h2>{userData?.username}</h2>
-            <button className={styles.logoutButton} onClick={handleLogout}>
-              <img src={logoutImage} alt='logout button' />
-              <span>Logout</span>
-            </button>
-          </div>
-        </div>
         {isLoading ? (
           <div className={styles.loadingDiv}>
             <div className={styles.loadingBackground}>
